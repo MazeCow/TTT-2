@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Anthony Spencer",
+    "age": 16,
+    "products": [
+      {
+        "id": 1,
+        "quantity": 2
+      },
+      {
+        "id": 2,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "name": "John Doe",
+    "age": 18,
+    "products": [
+      {
+        "id": 3,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "name": "Isaac Trost",
+    "age": 17,
+    "products": [
+      {
+        "id": 4,
+        "quantity": 1
+      },
+      {
+        "id": 1,
+        "quantity": 2
+      }
+    ]
+  }
+]

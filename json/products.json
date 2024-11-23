@@ -1,0 +1,18 @@
+{
+  "1": {
+    "name": "Tablet",
+    "price": 100
+  },
+  "2": {
+    "name": "Phone",
+    "price": 200
+  },
+  "3": {
+    "name": "Laptop",
+    "price": 300
+  },
+  "4": {
+    "name": "Camera",
+    "price": 400
+  }
+}
