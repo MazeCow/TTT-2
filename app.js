@@ -17,6 +17,9 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+/* Set up static assets */
+app.use(express.static(path.join(__dirname, "public")));
+
 /* Users endpoint. */
 app.get("/users", (req, res) => {
   const userData = JSON.parse(

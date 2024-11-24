@@ -5,15 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Management</title>
     <style></style>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
   </head>
   <body>
-    <p>index.html</p>
-    <div id="user-container"></div>
+    <div id="container"></div>
   </body>
   <script>
-    const userContainer = document.getElementById("user-container");
     let productData;
-    let purchaseData;
 
     /* Fetch product data. */
     fetch("http://localhost:3000/products")
@@ -28,14 +26,14 @@
       .then((userData) => {
         let grandTotal = 0;
         const newUserData = userData.map((user) => {
-          const newProducts = user.products.map((item) => {
-            const price = productData[item.id].price;
+          const newUserProducts = user.products.map((item) => {
+            const price = productData[`${item.id}`].price;
             const quantity = item.quantity;
             const total = price * quantity;
             grandTotal += total;
             return {
               id: item.id,
-              name: productData[item.id].name,
+              name: productData[`${item.id}`].name,
               price: price,
               quantity: quantity,
               total: total,
@@ -44,10 +42,69 @@
           return {
             name: user.name,
             age: user.age,
-            cart: newProducts,
+            cart: newUserProducts,
           };
         });
-        purchaseData = newUserData;
+        displayData(newUserData);
       });
+
+    function sendGrandTotal(grandTotal) {
+      fetch("http://localhost:3000/productData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          grandTotal: grandTotal,
+        }),
+      });
+    }
+
+    function displayData(userData) {
+      /* Locate container on document. */
+      const container = document.getElementById("container");
+
+      let grandTotal = 0;
+      userData.forEach((user) => {
+        console.log(user);
+
+        /* Create new container to hold the user's data */
+        const userContainer = document.createElement("div");
+        userContainer.classList.add("user-container");
+        userContainer.innerHTML += `<h3>${user.name}, Age ${user.age}</h3>`;
+
+        /* Create a table to hold user purchases */
+        const table = document.createElement("table");
+
+        /* Create and table header. */
+        const header = document.createElement("tr");
+        header.innerHTML =
+          "<th>Item</th><th>Price</th><th>Quantity</th><th>Total</th>";
+        table.appendChild(header);
+
+        /* Create table content. */
+        let subtotal = 0;
+        /* Create table rows with the appropriate data. */
+        user.cart.forEach((purchase) => {
+          /* Add to the subtotal */
+          subtotal += purchase.total;
+          const row = document.createElement("tr");
+          row.innerHTML += `<td>${
+            purchase.name
+          }</td><td>$${purchase.price.toLocaleString()}</td><td>${
+            purchase.quantity
+          }</td><td>$${purchase.total.toLocaleString()}</td>`;
+          table.appendChild(row);
+        });
+        grandTotal += subtotal;
+
+        userContainer.appendChild(table);
+        userContainer.innerHTML += `<p><b>Subtotal: $${subtotal.toLocaleString()}</b></p><br>`;
+        container.appendChild(userContainer);
+      });
+      container.innerHTML += `<h3>Grand Total: $${grandTotal.toLocaleString()}</h3>`;
+      sendGrandTotal(grandTotal);
+    }
+    displayData();
   </script>
 </html>
